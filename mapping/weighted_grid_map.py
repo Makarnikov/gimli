@@ -1,7 +1,6 @@
 # weighted_grid_map.py
 
 import numpy as np
-from object_detection.danger_scores import get_danger_score
 import os
 import sys
 
@@ -15,11 +14,9 @@ class WeightedGridMap:
         self.height = height
         self.grid = np.zeros((height, width), dtype=float)
 
-    def update_danger_zone(self, x, y, label):
-        score = get_danger_score(label)
-        if 0 <= x < self.width and 0 <= y < self.height:
-            self.grid[y][x] += score * 10
-            self.grid[y][x] = min(self.grid[y][x], 100.0)
+    def update_danger_zone(self, gx, gy, label, score):
+        self.grid[gy][gx] += score
+
 
     def get_cost(self, x, y):
         if 0 <= x < self.width and 0 <= y < self.height:

@@ -1,6 +1,10 @@
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from ultralytics import YOLO
 import cv2
-from object_detection.danger_scores import get_danger_score
+from danger_scores import get_danger_score
 from mapping.weighted_grid_map import WeightedGridMap
 
 model = YOLO("yolov8n.pt")
@@ -36,6 +40,7 @@ while True:
             cls_id = int(box.cls[0])
             label = model.names[cls_id]
             score = get_danger_score(label)
+            grid.update_danger_zone(gx, gy, label, score)  # skor parametresiyle gönder
 
             x1, y1, x2, y2 = box.xyxy[0]  # bbox koordinatları
             center_x = int((x1 + x2) / 2)
